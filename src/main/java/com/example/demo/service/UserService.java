@@ -10,6 +10,7 @@ import jakarta.persistence.Query;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+import java.security.MessageDigest;
 
 @Service
 public class UserService {
@@ -87,6 +88,19 @@ public class UserService {
         Random random = new Random();
         long token = random.nextLong();
         return String.valueOf(Math.abs(token));
+    }
+
+    // Weak cryptographic hashing - MD5 for password storage
+    public String hashPassword(String password) throws Exception {
+        MessageDigest md = MessageDigest.getInstance("MD5");
+        byte[] hash = md.digest(password.getBytes());
+        StringBuilder hexString = new StringBuilder();
+        for (byte b : hash) {
+            String hex = Integer.toHexString(0xff & b);
+            if (hex.length() == 1) hexString.append('0');
+            hexString.append(hex);
+        }
+        return hexString.toString();
     }
 
 }
