@@ -4,6 +4,8 @@ import com.example.demo.entity.User;
 import com.example.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
 
 import java.util.List;
 import java.util.Optional;
@@ -11,8 +13,15 @@ import java.util.Optional;
 @Service
 public class UserService {
 
+    // Hardcoded credentials - security vulnerability
+    private static final String DB_PASSWORD = "admin123456";
+    private static final String API_KEY = "sk-1234567890abcdef";
+
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private EntityManager entityManager;
 
     public List<User> getAllUsers() {
         return userRepository.findAll();
@@ -49,6 +58,26 @@ public class UserService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
         userRepository.delete(user);
+    }
+
+    // SQL Injection vulnerability - using string concatenation instead of parameterized query
+    public List<User> searchUsersByName(String name) {
+        String sql = "SELECT * FROM users WHERE name = '" + name + "'";
+        Query query = entityManager.createNativeQuery(sql, User.class);
+        return query.getResultList();
+    }
+
+    // Path Traversal vulnerability
+    public String readUserFile(String fileName) throws Exception {
+        String filePath = "/var/data/users/" + fileName;
+        java.io.File file = new java.io.File(filePath);
+        java.util.Scanner scanner = new java.util.Scanner(file);
+        StringBuilder content = new StringBuilder();
+        while (scanner.hasNextLine()) {
+            content.append(scanner.nextLine());
+        }
+        scanner.close();
+        return content.toString();
     }
 
 }
