@@ -21,8 +21,10 @@ class FileProcessingExceptionTest {
 
     @Test
     void testExceptionCanBeThrown() {
-        assertThrows(FileProcessingException.class, () -> {
-            throw new FileProcessingException("Test exception", new IOException());
+        IOException cause = new IOException();
+        FileProcessingException exception = assertThrows(FileProcessingException.class, () -> {
+            throw new FileProcessingException("Test exception", cause);
         });
+        assertNotNull(exception);
     }
 }

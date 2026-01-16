@@ -19,8 +19,10 @@ class XmlParsingExceptionTest {
 
     @Test
     void testExceptionCanBeThrown() {
-        assertThrows(XmlParsingException.class, () -> {
-            throw new XmlParsingException("Test exception", new Exception());
+        Exception cause = new Exception();
+        XmlParsingException exception = assertThrows(XmlParsingException.class, () -> {
+            throw new XmlParsingException("Test exception", cause);
         });
+        assertNotNull(exception);
     }
 }

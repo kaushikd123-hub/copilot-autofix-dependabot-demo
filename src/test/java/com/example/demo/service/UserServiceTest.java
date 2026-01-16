@@ -222,7 +222,7 @@ class UserServiceTest {
         
         jakarta.persistence.Query query = mock(jakarta.persistence.Query.class);
         when(entityManager.createNativeQuery(anyString(), eq(User.class))).thenReturn(query);
-        when(query.setParameter(eq("name"), eq("John Doe"))).thenReturn(query);
+        when(query.setParameter("name", "John Doe")).thenReturn(query);
         when(query.getResultList()).thenReturn(Arrays.asList(user));
 
         List<User> result = userService.searchUsersByName("John Doe");

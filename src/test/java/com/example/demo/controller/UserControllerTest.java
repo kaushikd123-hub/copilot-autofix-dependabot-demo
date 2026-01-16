@@ -3,7 +3,6 @@ package com.example.demo.controller;
 import com.example.demo.entity.User;
 import com.example.demo.service.UserService;
 import com.example.demo.exception.UserNotFoundException;
-import com.example.demo.exception.UserAlreadyExistsException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
