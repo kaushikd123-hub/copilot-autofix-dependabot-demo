@@ -1,7 +1,7 @@
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '3.2.1'
-    id 'io.spring.dependency-management' version '1.1.4'
+    id 'org.springframework.boot' version '3.3.7'
+    id 'io.spring.dependency-management' version '1.1.7'
 }
 
 group = 'com.example'
@@ -12,6 +12,12 @@ repositories {
     mavenCentral()
 }
 
+ext {
+    set('tomcatVersion', '10.1.42')
+    set('springFrameworkVersion', '6.1.21')
+    set('logbackVersion', '1.5.19')
+}
+
 
 dependencies {
     // Spring Boot Starter Web
@@ -19,6 +25,17 @@ dependencies {
     
     // Spring Boot Starter Data JPA
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    
+    // Override transitive dependencies with patched versions
+    implementation 'org.springframework:spring-web'
+    implementation 'org.springframework:spring-webmvc'
+    implementation 'org.springframework:spring-context'
+    implementation 'org.springframework:spring-core'
+    implementation 'org.apache.tomcat.embed:tomcat-embed-core'
+    implementation 'org.apache.tomcat.embed:tomcat-embed-websocket'
+    implementation 'ch.qos.logback:logback-core'
+    implementation 'ch.qos.logback:logback-classic'
+    implementation 'net.minidev:json-smart:2.5.2'
     
     // H2 Database - Updated to latest version to fix CVEs
     runtimeOnly 'com.h2database:h2:2.2.224'
@@ -28,11 +45,11 @@ dependencies {
     implementation 'org.apache.logging.log4j:log4j-api:2.25.3'
     
     // Jackson Databind - Already updated by Dependabot
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.7.1'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.18.2'
     
     // Lombok for reducing boilerplate code
-    compileOnly 'org.projectlombok:lombok:1.18.30'
-    annotationProcessor 'org.projectlombok:lombok:1.18.30'
+    compileOnly 'org.projectlombok:lombok:1.18.36'
+    annotationProcessor 'org.projectlombok:lombok:1.18.36'
     
     // Test dependencies
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
