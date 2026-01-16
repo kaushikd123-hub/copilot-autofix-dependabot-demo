@@ -37,7 +37,7 @@ dependencies {
     implementation 'ch.qos.logback:logback-core'
     implementation 'ch.qos.logback:logback-classic'
     implementation 'net.minidev:json-smart:2.5.2'
-    implementation 'org.xmlunit:xmlunit-core:${xmlunitVersion}'
+    implementation "org.xmlunit:xmlunit-core:$xmlunitVersion"
     
     // H2 Database - Updated to latest version to fix CVEs
     runtimeOnly 'com.h2database:h2:2.2.224'
