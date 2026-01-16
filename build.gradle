@@ -1,6 +1,6 @@
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '3.3.7'
+    id 'org.springframework.boot' version '3.3.11'
     id 'io.spring.dependency-management' version '1.1.7'
 }
 
@@ -13,9 +13,10 @@ repositories {
 }
 
 ext {
-    set('tomcatVersion', '10.1.42')
+    set('tomcatVersion', '10.1.47')
     set('springFrameworkVersion', '6.1.21')
     set('logbackVersion', '1.5.19')
+    set('xmlunitVersion', '2.10.0')
 }
 
 
@@ -36,6 +37,7 @@ dependencies {
     implementation 'ch.qos.logback:logback-core'
     implementation 'ch.qos.logback:logback-classic'
     implementation 'net.minidev:json-smart:2.5.2'
+    implementation 'org.xmlunit:xmlunit-core:${xmlunitVersion}'
     
     // H2 Database - Updated to latest version to fix CVEs
     runtimeOnly 'com.h2database:h2:2.2.224'
