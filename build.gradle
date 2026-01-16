@@ -15,8 +15,8 @@ repositories {
 // Exclude Spring Boot's dependency management for Log4j to force vulnerable version
 configurations.all {
     resolutionStrategy {
-        force 'org.apache.logging.log4j:log4j-core:2.14.1'
-        force 'org.apache.logging.log4j:log4j-api:2.14.1'
+        force 'org.apache.logging.log4j:log4j-core:2.25.3'
+        force 'org.apache.logging.log4j:log4j-api:2.25.3'
     }
 }
 
@@ -34,11 +34,11 @@ dependencies {
     
     // VULNERABLE DEPENDENCY - Log4j 2.14.1 has CVE-2021-44228 (Log4Shell) - CRITICAL
     // Forced version to ensure Dependabot detects it
-    implementation 'org.apache.logging.log4j:log4j-core:2.14.1'
-    implementation 'org.apache.logging.log4j:log4j-api:2.14.1'
+    implementation 'org.apache.logging.log4j:log4j-core:2.25.3'
+    implementation 'org.apache.logging.log4j:log4j-api:2.25.3'
     
     // VULNERABLE DEPENDENCY - Jackson Databind 2.9.8 has multiple CVEs
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.9.8'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.7.1'
     
     // Lombok for reducing boilerplate code
     compileOnly 'org.projectlombok:lombok:1.18.20'
