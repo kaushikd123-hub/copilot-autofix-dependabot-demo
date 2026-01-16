@@ -12,9 +12,19 @@ repositories {
     mavenCentral()
 }
 
+// Exclude Spring Boot's dependency management for Log4j to force vulnerable version
+configurations.all {
+    resolutionStrategy {
+        force 'org.apache.logging.log4j:log4j-core:2.14.1'
+        force 'org.apache.logging.log4j:log4j-api:2.14.1'
+    }
+}
+
 dependencies {
-    // Spring Boot Starter Web
-    implementation 'org.springframework.boot:spring-boot-starter-web'
+    // Spring Boot Starter Web (excluding managed Log4j)
+    implementation('org.springframework.boot:spring-boot-starter-web') {
+        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+    }
     
     // Spring Boot Starter Data JPA
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
@@ -22,13 +32,13 @@ dependencies {
     // H2 Database
     runtimeOnly 'com.h2database:h2'
     
-    // VULNERABLE DEPENDENCY - Log4j 2.14.1 has CVE-2021-44228 (Log4Shell)
-    // This is deliberately vulnerable for testing Dependabot
+    // VULNERABLE DEPENDENCY - Log4j 2.14.1 has CVE-2021-44228 (Log4Shell) - CRITICAL
+    // Forced version to ensure Dependabot detects it
     implementation 'org.apache.logging.log4j:log4j-core:2.14.1'
     implementation 'org.apache.logging.log4j:log4j-api:2.14.1'
     
-    // VULNERABLE DEPENDENCY - Spring Framework 5.3.0 has CVE-2021-22118
-    implementation 'org.springframework:spring-core:5.3.0'
+    // VULNERABLE DEPENDENCY - Jackson Databind 2.9.8 has multiple CVEs
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.9.8'
     
     // Lombok for reducing boilerplate code
     compileOnly 'org.projectlombok:lombok:1.18.20'
