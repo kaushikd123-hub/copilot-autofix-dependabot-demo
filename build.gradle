@@ -1,48 +1,38 @@
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '2.6.1'
-    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'org.springframework.boot' version '3.2.1'
+    id 'io.spring.dependency-management' version '1.1.4'
 }
 
 group = 'com.example'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '11'
+sourceCompatibility = '17'
 
 repositories {
     mavenCentral()
 }
 
-// Exclude Spring Boot's dependency management for Log4j to force vulnerable version
-configurations.all {
-    resolutionStrategy {
-        force 'org.apache.logging.log4j:log4j-core:2.25.3'
-        force 'org.apache.logging.log4j:log4j-api:2.25.3'
-    }
-}
 
 dependencies {
-    // Spring Boot Starter Web (excluding managed Log4j)
-    implementation('org.springframework.boot:spring-boot-starter-web') {
-        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
-    }
+    // Spring Boot Starter Web
+    implementation 'org.springframework.boot:spring-boot-starter-web'
     
     // Spring Boot Starter Data JPA
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     
-    // H2 Database
-    runtimeOnly 'com.h2database:h2'
+    // H2 Database - Updated to latest version to fix CVEs
+    runtimeOnly 'com.h2database:h2:2.2.224'
     
-    // VULNERABLE DEPENDENCY - Log4j 2.14.1 has CVE-2021-44228 (Log4Shell) - CRITICAL
-    // Forced version to ensure Dependabot detects it
+    // Log4j - Already updated by Dependabot
     implementation 'org.apache.logging.log4j:log4j-core:2.25.3'
     implementation 'org.apache.logging.log4j:log4j-api:2.25.3'
     
-    // VULNERABLE DEPENDENCY - Jackson Databind 2.9.8 has multiple CVEs
+    // Jackson Databind - Already updated by Dependabot
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.7.1'
     
     // Lombok for reducing boilerplate code
-    compileOnly 'org.projectlombok:lombok:1.18.20'
-    annotationProcessor 'org.projectlombok:lombok:1.18.20'
+    compileOnly 'org.projectlombok:lombok:1.18.30'
+    annotationProcessor 'org.projectlombok:lombok:1.18.30'
     
     // Test dependencies
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
