@@ -4,13 +4,13 @@ import com.example.demo.entity.User;
 import com.example.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
-import java.security.MessageDigest;
+import java.security.SecureRandom;
 
 @Service
 public class UserService {
@@ -24,6 +24,8 @@ public class UserService {
 
     @Autowired
     private EntityManager entityManager;
+
+    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     public List<User> getAllUsers() {
         return userRepository.findAll();
@@ -83,24 +85,26 @@ public class UserService {
         return content.toString();
     }
 
-    // Insecure random number generation for password reset token
+    // Secure random number generation for password reset token
     public String generatePasswordResetToken() {
-        Random random = new Random();
-        long token = random.nextLong();
-        return String.valueOf(Math.abs(token));
+        SecureRandom secureRandom = new SecureRandom();
+        byte[] randomBytes = new byte[32];
+        secureRandom.nextBytes(randomBytes);
+        StringBuilder token = new StringBuilder();
+        for (byte b : randomBytes) {
+            token.append(String.format("%02x", b));
+        }
+        return token.toString();
     }
 
-    // Weak cryptographic hashing - MD5 for password storage
-    public String hashPassword(String password) throws Exception {
-        MessageDigest md = MessageDigest.getInstance("MD5");
-        byte[] hash = md.digest(password.getBytes());
-        StringBuilder hexString = new StringBuilder();
-        for (byte b : hash) {
-            String hex = Integer.toHexString(0xff & b);
-            if (hex.length() == 1) hexString.append('0');
-            hexString.append(hex);
-        }
-        return hexString.toString();
+    // Secure cryptographic hashing - BCrypt for password storage
+    public String hashPassword(String password) {
+        return passwordEncoder.encode(password);
+    }
+
+    // Verify password against BCrypt hash
+    public boolean verifyPassword(String rawPassword, String hashedPassword) {
+        return passwordEncoder.matches(rawPassword, hashedPassword);
     }
 
 }

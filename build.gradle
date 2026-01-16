@@ -49,6 +49,9 @@ dependencies {
     // Jackson Databind - Already updated by Dependabot
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.18.2'
     
+    // Spring Security for password hashing
+    implementation 'org.springframework.security:spring-security-crypto:6.4.2'
+    
     // Lombok for reducing boilerplate code
     compileOnly 'org.projectlombok:lombok:1.18.36'
     annotationProcessor 'org.projectlombok:lombok:1.18.36'
