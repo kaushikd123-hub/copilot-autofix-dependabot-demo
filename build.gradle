@@ -13,8 +13,8 @@ repositories {
 }
 
 ext {
-    set('tomcatVersion', '10.1.47')
-    set('springFrameworkVersion', '6.1.21')
+    set('tomcatVersion', '10.1.45')
+    set('springFrameworkVersion', '6.2.11')
     set('logbackVersion', '1.5.19')
     set('xmlunitVersion', '2.10.0')
 }
