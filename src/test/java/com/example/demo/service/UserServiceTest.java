@@ -206,4 +206,37 @@ class UserServiceTest {
         assertNotNull(result);
         assertEquals("John Doe", result);
     }
+
+    @Test
+    void testParseUserDataXmlWithInvalidXml() {
+        String invalidXml = "<user><name>John Doe</user>";
+        
+        assertThrows(com.example.demo.exception.XmlParsingException.class, 
+            () -> userService.parseUserDataXml(invalidXml));
+    }
+
+    @Test
+    void testSearchUsersByName() {
+        User user = new User();
+        user.setName("John Doe");
+        
+        jakarta.persistence.Query query = mock(jakarta.persistence.Query.class);
+        when(entityManager.createNativeQuery(anyString(), eq(User.class))).thenReturn(query);
+        when(query.setParameter(eq("name"), eq("John Doe"))).thenReturn(query);
+        when(query.getResultList()).thenReturn(Arrays.asList(user));
+
+        List<User> result = userService.searchUsersByName("John Doe");
+
+        assertNotNull(result);
+        assertEquals(1, result.size());
+        assertEquals("John Doe", result.get(0).getName());
+    }
+
+    @Test
+    void testReadUserFileThrowsException() {
+        String fileName = "nonexistent.txt";
+        
+        assertThrows(com.example.demo.exception.FileProcessingException.class,
+            () -> userService.readUserFile(fileName));
+    }
 }
