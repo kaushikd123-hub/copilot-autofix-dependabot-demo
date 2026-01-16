@@ -146,7 +146,9 @@ class UserControllerTest {
 
         when(userService.updateUser(eq(1L), any(User.class))).thenThrow(new UserNotFoundException("User not found"));
 
-        assertThrows(UserNotFoundException.class, () -> userController.updateUser(1L, updateDetails));
+        ResponseEntity<User> response = userController.updateUser(1L, updateDetails);
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
         verify(userService, times(1)).updateUser(eq(1L), any(User.class));
     }
 
@@ -164,7 +166,9 @@ class UserControllerTest {
     void testDeleteUserNotFound() {
         doThrow(new UserNotFoundException("User not found")).when(userService).deleteUser(1L);
 
-        assertThrows(UserNotFoundException.class, () -> userController.deleteUser(1L));
+        ResponseEntity<Void> response = userController.deleteUser(1L);
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
         verify(userService, times(1)).deleteUser(1L);
     }
 }
