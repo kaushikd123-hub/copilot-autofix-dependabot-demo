@@ -107,4 +107,14 @@ public class UserService {
         return passwordEncoder.matches(rawPassword, hashedPassword);
     }
 
+    // XXE Vulnerability - insecure XML parsing without disabling external entities
+    public String parseUserDataXml(String xmlContent) throws Exception {
+        javax.xml.parsers.DocumentBuilderFactory factory = javax.xml.parsers.DocumentBuilderFactory.newInstance();
+        // Not setting security features - vulnerable to XXE attacks
+        javax.xml.parsers.DocumentBuilder builder = factory.newDocumentBuilder();
+        java.io.ByteArrayInputStream input = new java.io.ByteArrayInputStream(xmlContent.getBytes());
+        org.w3c.dom.Document doc = builder.parse(input);
+        return doc.getDocumentElement().getTextContent();
+    }
+
 }
