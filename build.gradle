@@ -28,14 +28,14 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     
     // Override transitive dependencies with patched versions
-    implementation 'org.springframework:spring-web'
-    implementation 'org.springframework:spring-webmvc'
-    implementation 'org.springframework:spring-context'
-    implementation 'org.springframework:spring-core'
-    implementation 'org.apache.tomcat.embed:tomcat-embed-core'
-    implementation 'org.apache.tomcat.embed:tomcat-embed-websocket'
-    implementation 'ch.qos.logback:logback-core'
-    implementation 'ch.qos.logback:logback-classic'
+    implementation "org.springframework:spring-web:$springFrameworkVersion"
+    implementation "org.springframework:spring-webmvc:$springFrameworkVersion"
+    implementation "org.springframework:spring-context:$springFrameworkVersion"
+    implementation "org.springframework:spring-core:$springFrameworkVersion"
+    implementation "org.apache.tomcat.embed:tomcat-embed-core:$tomcatVersion"
+    implementation "org.apache.tomcat.embed:tomcat-embed-websocket:$tomcatVersion"
+    implementation "ch.qos.logback:logback-core:$logbackVersion"
+    implementation "ch.qos.logback:logback-classic:$logbackVersion"
     implementation 'net.minidev:json-smart:2.5.2'
     implementation "org.xmlunit:xmlunit-core:$xmlunitVersion"
     
