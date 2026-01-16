@@ -1,0 +1,27 @@
+version: 2
+updates:
+  # Enable Gradle dependency updates
+  - package-ecosystem: "gradle"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    open-pull-requests-limit: 10
+    # Group minor and patch updates
+    groups:
+      minor-and-patch:
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
+    # Allow version updates for vulnerable dependencies
+    allow:
+      - dependency-type: "all"
+    # Enable security updates
+    security-updates-only: false
+    
+  # Enable GitHub Actions workflow updates
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
