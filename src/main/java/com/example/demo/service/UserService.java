@@ -9,6 +9,7 @@ import jakarta.persistence.Query;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 @Service
 public class UserService {
@@ -79,6 +80,13 @@ public class UserService {
         }
         scanner.close();
         return content.toString();
+    }
+
+    // Insecure random number generation for password reset token
+    public String generatePasswordResetToken() {
+        Random random = new Random();
+        long token = random.nextLong();
+        return String.valueOf(Math.abs(token));
     }
 
 }
