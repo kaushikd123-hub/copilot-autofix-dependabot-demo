@@ -8,22 +8,23 @@ on:
   schedule:
     - cron: '0 0 * * 1'
 
+permissions:
+  contents: read
+  security-events: write
+  actions: read
+
 jobs:
   analyze:
     name: Analyze (${{ matrix.language }})
     runs-on: ubuntu-latest
-    permissions:
-      security-events: write
-      packages: read
-      actions: read
-      contents: read
+    timeout-minutes: 360
 
     strategy:
       fail-fast: false
       matrix:
         include:
         - language: java-kotlin
-          build-mode: autobuild
+          build-mode: manual
 
     steps:
     - name: Checkout repository
@@ -39,8 +40,10 @@ jobs:
       uses: github/codeql-action/init@v3
       with:
         languages: ${{ matrix.language }}
-        build-mode: ${{ matrix.build-mode }}
         queries: +security-and-quality
+
+    - name: Build with Gradle
+      run: ./gradlew clean build -x test
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v3
