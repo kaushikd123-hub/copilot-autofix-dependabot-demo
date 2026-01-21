@@ -93,7 +93,6 @@ public class UserService {
 
     // Secure random number generation for password reset token
     public String generatePasswordResetToken() {
-        SecureRandom secureRandom = new SecureRandom();
         byte[] randomBytes = new byte[32];
         secureRandom.nextBytes(randomBytes);
         StringBuilder token = new StringBuilder();
