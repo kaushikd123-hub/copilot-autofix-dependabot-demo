@@ -112,6 +112,13 @@ public class UserService {
         return passwordEncoder.matches(rawPassword, hashedPassword);
     }
 
+    // VULNERABILITY: Weak random number generation for session IDs
+    public String generateSessionId() {
+        java.util.Random random = new java.util.Random();
+        long sessionId = random.nextLong();
+        return Long.toHexString(sessionId);
+    }
+
     // Secure XML parsing with XXE protection
     public String parseUserDataXml(String xmlContent) {
         try {
