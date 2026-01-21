@@ -1,0 +1,2 @@
+"Severity","Type","Message","File","Line","Rule","CreatedAt"
+"CRITICAL","BUG","Save and re-use this ""Random"".","src/main/java/com/example/demo/service/UserService.java","117","java:S2119","1/21/2026 2:58:37 PM"

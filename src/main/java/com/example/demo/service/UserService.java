@@ -22,6 +22,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final EntityManager entityManager;
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    private final SecureRandom secureRandom = new SecureRandom();
 
     public UserService(UserRepository userRepository, EntityManager entityManager) {
         this.userRepository = userRepository;
@@ -112,10 +113,9 @@ public class UserService {
         return passwordEncoder.matches(rawPassword, hashedPassword);
     }
 
-    // VULNERABILITY: Weak random number generation for session IDs
+    // Secure session ID generation using SecureRandom
     public String generateSessionId() {
-        java.util.Random random = new java.util.Random();
-        long sessionId = random.nextLong();
+        long sessionId = secureRandom.nextLong();
         return Long.toHexString(sessionId);
     }
 
