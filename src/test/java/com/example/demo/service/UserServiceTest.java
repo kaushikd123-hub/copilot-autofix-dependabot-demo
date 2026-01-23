@@ -239,4 +239,29 @@ class UserServiceTest {
         assertThrows(com.example.demo.exception.FileProcessingException.class,
             () -> userService.readUserFile(fileName));
     }
+
+    @Test
+    void testProcessUserDataWithValidData() {
+        // Should not throw exception for valid numeric data
+        assertDoesNotThrow(() -> userService.processUserData("12345"));
+    }
+
+    @Test
+    void testProcessUserDataWithInvalidData() {
+        // Should throw IllegalArgumentException for invalid data
+        assertThrows(IllegalArgumentException.class, 
+            () -> userService.processUserData("invalid"));
+    }
+
+    @Test
+    void testGenerateSessionId() {
+        String sessionId1 = userService.generateSessionId();
+        String sessionId2 = userService.generateSessionId();
+
+        assertNotNull(sessionId1);
+        assertNotNull(sessionId2);
+        assertFalse(sessionId1.isEmpty());
+        assertFalse(sessionId2.isEmpty());
+        // Session IDs should be different (highly likely with SecureRandom)
+    }
 }
