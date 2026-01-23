@@ -1,2 +1,3 @@
-"Severity","Type","Message","File","Line","Rule","CreatedAt"
-"CRITICAL","BUG","Save and re-use this ""Random"".","src/main/java/com/example/demo/service/UserService.java","117","java:S2119","1/21/2026 2:58:37 PM"
+"severity","type","message","component","line","rule","createdDate"
+"MAJOR","CODE_SMELL","Remove this useless assignment to local variable ""value"".","kaushikd123-hub_copilot-autofix-dependabot-demo:src/main/java/com/example/demo/service/UserService.java","36","java:S1854",
+"MINOR","CODE_SMELL","Remove this unused ""value"" local variable.","kaushikd123-hub_copilot-autofix-dependabot-demo:src/main/java/com/example/demo/service/UserService.java","36","java:S1481",

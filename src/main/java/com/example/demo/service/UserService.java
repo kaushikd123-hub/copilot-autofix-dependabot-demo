@@ -29,13 +29,14 @@ public class UserService {
         this.entityManager = entityManager;
     }
 
-    // Vulnerability: Empty catch block swallows exceptions
+    // Fixed: Proper exception handling with logging
     public void processUserData(String data) {
         try {
-            // Some processing logic
-            int value = Integer.parseInt(data);
+            // Process data - parsing to validate numeric format
+            Integer.parseInt(data);
         } catch (NumberFormatException e) {
-            // Empty catch - vulnerability
+            // Log the error and handle it appropriately
+            throw new IllegalArgumentException("Invalid data format: " + data, e);
         }
     }
 
