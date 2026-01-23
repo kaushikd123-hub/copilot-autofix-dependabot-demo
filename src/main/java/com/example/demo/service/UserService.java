@@ -29,6 +29,16 @@ public class UserService {
         this.entityManager = entityManager;
     }
 
+    // Vulnerability: Empty catch block swallows exceptions
+    public void processUserData(String data) {
+        try {
+            // Some processing logic
+            int value = Integer.parseInt(data);
+        } catch (NumberFormatException e) {
+            // Empty catch - vulnerability
+        }
+    }
+
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
