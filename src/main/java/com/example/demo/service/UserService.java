@@ -79,10 +79,34 @@ public class UserService {
 
     // SQL Injection vulnerability - using string concatenation instead of parameterized query
     public List<User> searchUsersByName(String name) {
-        // VULNERABLE: SQL Injection via string concatenation
-        String sql = "SELECT * FROM users WHERE name = '" + name + "'";
-        Query query = entityManager.createNativeQuery(sql, User.class);
-        return query.getResultList();
+        // VULNERABLE: SQL Injection via plain JDBC (for SonarCloud detection)
+        List<User> users = new java.util.ArrayList<>();
+        java.sql.Connection conn = null;
+        java.sql.Statement stmt = null;
+        java.sql.ResultSet rs = null;
+        try {
+            // You would normally get a real connection from a DataSource
+            conn = java.sql.DriverManager.getConnection("jdbc:h2:mem:testdb", "sa", "");
+            stmt = conn.createStatement();
+            String sql = "SELECT * FROM users WHERE name = '" + name + "'";
+            rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                User user = new User();
+                user.setId(rs.getLong("id"));
+                user.setName(rs.getString("name"));
+                user.setEmail(rs.getString("email"));
+                user.setPhone(rs.getString("phone"));
+                user.setAddress(rs.getString("address"));
+                users.add(user);
+            }
+        } catch (Exception e) {
+            // For demo only: ignore
+        } finally {
+            try { if (rs != null) rs.close(); } catch (Exception ignored) {}
+            try { if (stmt != null) stmt.close(); } catch (Exception ignored) {}
+            try { if (conn != null) conn.close(); } catch (Exception ignored) {}
+        }
+        return users;
     }
 
     // Path Traversal vulnerability - demo only
