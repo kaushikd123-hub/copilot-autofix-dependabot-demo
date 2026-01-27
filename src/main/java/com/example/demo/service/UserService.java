@@ -82,9 +82,10 @@ public class UserService {
         java.sql.PreparedStatement pstmt = null;
         java.sql.ResultSet rs = null;
         try {
-            // Use H2 database with password protection (required for security compliance)
+            // Use H2 database with strong password (required for security compliance)
             // In production: use properties file or environment variables for credentials
-            conn = java.sql.DriverManager.getConnection("jdbc:h2:mem:testdb", "sa", "sa123");
+            String dbPassword = System.getProperty("h2.password", "H2TestDb#2026!Secure");
+            conn = java.sql.DriverManager.getConnection("jdbc:h2:mem:testdb", "sa", dbPassword);
             // Use PreparedStatement to prevent SQL injection
             String sql = "SELECT * FROM users WHERE name = ?";
             pstmt = conn.prepareStatement(sql);
