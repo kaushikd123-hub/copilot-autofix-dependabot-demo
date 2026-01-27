@@ -75,20 +75,21 @@ public class UserService {
         userRepository.delete(user);
     }
 
-    // SQL Injection vulnerability - using string concatenation instead of parameterized query
+    // Fixed: SQL Injection vulnerability - Using PreparedStatement (secure parameterized query)
     public List<User> searchUsersByName(String name) {
-        // VULNERABLE: SQL Injection via plain JDBC (for SonarCloud detection)
         List<User> users = new java.util.ArrayList<>();
         java.sql.Connection conn = null;
-        java.sql.Statement stmt = null;
+        java.sql.PreparedStatement pstmt = null;
         java.sql.ResultSet rs = null;
         try {
             // Fixed: Add password protection to database connection
             String securePassword = "H2SecurePassword123!@#";
             conn = java.sql.DriverManager.getConnection("jdbc:h2:mem:testdb", "sa", securePassword);
-            stmt = conn.createStatement();
-            String sql = "SELECT * FROM users WHERE name = '" + name + "'";
-            rs = stmt.executeQuery(sql);
+            // Use PreparedStatement to prevent SQL injection
+            String sql = "SELECT * FROM users WHERE name = ?";
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, name);
+            rs = pstmt.executeQuery();
             while (rs.next()) {
                 User user = new User();
                 user.setId(rs.getLong("id"));
@@ -99,12 +100,12 @@ public class UserService {
                 users.add(user);
             }
         } catch (Exception e) {
-            // For demo only: log error
+            // Log error for debugging purposes
             e.printStackTrace();
         } finally {
-            try { if (rs != null) rs.close(); } catch (Exception ignored) { /* suppress */ }
-            try { if (stmt != null) stmt.close(); } catch (Exception ignored) { /* suppress */ }
-            try { if (conn != null) conn.close(); } catch (Exception ignored) { /* suppress */ }
+            try { if (rs != null) rs.close(); } catch (Exception ignored) { /* resource cleanup */ }
+            try { if (pstmt != null) pstmt.close(); } catch (Exception ignored) { /* resource cleanup */ }
+            try { if (conn != null) conn.close(); } catch (Exception ignored) { /* resource cleanup */ }
         }
         return users;
     }
