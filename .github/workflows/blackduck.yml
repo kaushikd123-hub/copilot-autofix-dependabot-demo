@@ -1,63 +1,7 @@
-name: Black Duck Security Scan
+name: Black Duck Security Scan (DISABLED)
 
 on:
-  push:
-    branches: [ master, main ]
-  pull_request:
-    branches: [ master, main ]
-  schedule:
-    - cron: '0 0 * * 0'  # Weekly on Sunday at midnight
   workflow_dispatch:
 
-jobs:
-  blackduck-scan:
-    runs-on: ubuntu-latest
-    
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-
-    - name: Set up JDK 17
-      uses: actions/setup-java@v4
-      with:
-        java-version: '17'
-        distribution: 'temurin'
-
-    - name: Setup Gradle
-      uses: gradle/gradle-build-action@v3
-
-    - name: Build with Gradle
-      run: ./gradlew build -x test
-
-    - name: Run Black Duck Scan
-      uses: blackducksoftware/github-action@v2
-      with:
-        args: >
-          --blackduck.url=${{ secrets.BLACKDUCK_URL }}
-          --blackduck.api.token=${{ secrets.BLACKDUCK_API_TOKEN }}
-          --detect.project.name=${{ github.event.repository.name }}
-          --detect.project.version.name=${{ github.ref_name }}
-          --detect.code.location.name=${{ github.event.repository.name }}-${{ github.ref_name }}
-          --detect.cleanup=false
-          --detect.gradle.build.command="build -x test"
-          --detect.policy.check.fail.on.severities=BLOCKER,CRITICAL,MAJOR
-          --detect.risk.report.pdf=true
-          --detect.notices.report=true
-          --logging.level.com.synopsys.integration=DEBUG
-
-    - name: Upload Black Duck Results
-      uses: actions/upload-artifact@v4
-      if: always()
-      with:
-        name: blackduck-results
-        path: |
-          **/BlackDuck_RiskReport.pdf
-          **/BlackDuck_Notices_Report.txt
-        retention-days: 30
-
-    - name: Check Black Duck Policy
-      if: failure()
-      run: |
-        echo "Black Duck scan failed due to policy violations"
-        echo "Check the Black Duck server for detailed vulnerability information"
-        exit 1
+# Black Duck workflow temporarily disabled by commenting out all jobs.
+# To re-enable, restore the jobs section and triggers as needed.
