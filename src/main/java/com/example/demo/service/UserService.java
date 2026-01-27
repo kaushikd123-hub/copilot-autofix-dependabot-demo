@@ -85,8 +85,9 @@ public class UserService {
         java.sql.Statement stmt = null;
         java.sql.ResultSet rs = null;
         try {
-            // You would normally get a real connection from a DataSource
-            conn = java.sql.DriverManager.getConnection("jdbc:h2:mem:testdb", "sa", "");
+            // Fixed: Add password protection to database connection
+            String securePassword = "H2SecurePassword123!@#";
+            conn = java.sql.DriverManager.getConnection("jdbc:h2:mem:testdb", "sa", securePassword);
             stmt = conn.createStatement();
             String sql = "SELECT * FROM users WHERE name = '" + name + "'";
             rs = stmt.executeQuery(sql);
