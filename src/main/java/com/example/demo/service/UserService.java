@@ -82,9 +82,9 @@ public class UserService {
         java.sql.PreparedStatement pstmt = null;
         java.sql.ResultSet rs = null;
         try {
-            // Fixed: Add password protection to database connection
-            String securePassword = "H2SecurePassword123!@#";
-            conn = java.sql.DriverManager.getConnection("jdbc:h2:mem:testdb", "sa", securePassword);
+            // Use H2 database with default in-memory configuration (no password needed for test)
+            // In production: use properties file or environment variables for credentials
+            conn = java.sql.DriverManager.getConnection("jdbc:h2:mem:testdb", "sa", "");
             // Use PreparedStatement to prevent SQL injection
             String sql = "SELECT * FROM users WHERE name = ?";
             pstmt = conn.prepareStatement(sql);
@@ -165,6 +165,7 @@ public class UserService {
             factory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
             factory.setXIncludeAware(false);
             factory.setExpandEntityReferences(false);
+            factory.setAttribute("http://javax.xml.XMLConstants/feature/secure-processing", Boolean.TRUE);
             
             javax.xml.parsers.DocumentBuilder builder = factory.newDocumentBuilder();
             java.io.ByteArrayInputStream input = new java.io.ByteArrayInputStream(xmlContent.getBytes());
