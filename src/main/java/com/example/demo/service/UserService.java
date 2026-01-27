@@ -79,9 +79,9 @@ public class UserService {
 
     // SQL Injection vulnerability - using string concatenation instead of parameterized query
     public List<User> searchUsersByName(String name) {
-        String sql = "SELECT * FROM users WHERE name = :name";
+        // VULNERABLE: SQL Injection via string concatenation
+        String sql = "SELECT * FROM users WHERE name = '" + name + "'";
         Query query = entityManager.createNativeQuery(sql, User.class);
-        query.setParameter("name", name);
         return query.getResultList();
     }
 
