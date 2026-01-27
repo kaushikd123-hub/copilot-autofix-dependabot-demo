@@ -20,13 +20,11 @@ import java.io.IOException;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final EntityManager entityManager;
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     private final SecureRandom secureRandom = new SecureRandom();
 
-    public UserService(UserRepository userRepository, EntityManager entityManager) {
+    public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.entityManager = entityManager;
     }
 
     // Fixed: Proper exception handling with logging
@@ -101,11 +99,12 @@ public class UserService {
                 users.add(user);
             }
         } catch (Exception e) {
-            // For demo only: ignore
+            // For demo only: log error
+            e.printStackTrace();
         } finally {
-            try { if (rs != null) rs.close(); } catch (Exception ignored) {}
-            try { if (stmt != null) stmt.close(); } catch (Exception ignored) {}
-            try { if (conn != null) conn.close(); } catch (Exception ignored) {}
+            try { if (rs != null) rs.close(); } catch (Exception ignored) { /* suppress */ }
+            try { if (stmt != null) stmt.close(); } catch (Exception ignored) { /* suppress */ }
+            try { if (conn != null) conn.close(); } catch (Exception ignored) { /* suppress */ }
         }
         return users;
     }
