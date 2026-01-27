@@ -82,9 +82,9 @@ public class UserService {
         java.sql.PreparedStatement pstmt = null;
         java.sql.ResultSet rs = null;
         try {
-            // Use H2 database with default in-memory configuration (no password needed for test)
+            // Use H2 database with password protection (required for security compliance)
             // In production: use properties file or environment variables for credentials
-            conn = java.sql.DriverManager.getConnection("jdbc:h2:mem:testdb", "sa", "");
+            conn = java.sql.DriverManager.getConnection("jdbc:h2:mem:testdb", "sa", "sa123");
             // Use PreparedStatement to prevent SQL injection
             String sql = "SELECT * FROM users WHERE name = ?";
             pstmt = conn.prepareStatement(sql);
@@ -100,8 +100,8 @@ public class UserService {
                 users.add(user);
             }
         } catch (Exception e) {
-            // Log error for debugging purposes
-            e.printStackTrace();
+            // Log error appropriately - in production use proper logging framework
+            throw new RuntimeException("Failed to search users by name", e);
         } finally {
             try { if (rs != null) rs.close(); } catch (Exception ignored) { /* resource cleanup */ }
             try { if (pstmt != null) pstmt.close(); } catch (Exception ignored) { /* resource cleanup */ }
